@@ -14,7 +14,7 @@ type IRepository interface {
 }
 
 // Repository - Dummy repository, this simulates the use of a datastore
-// of some kind, We'll replace this with a real implementation later on.
+// of some kind. We'll replace this with a real implementation later on.
 type Repository struct {
 	consignments []*pb.Consignment
 }
@@ -37,17 +37,18 @@ type service struct {
 	repo IRepository
 }
 
-// CreateConsignment - we create just one method on our service,
+// CreateConsignment - we created just one method on our service,
 // which is a create method, which takes a context and a request as an
 // argument, these are handled by the gRPC server.
 func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, res *pb.Response) error {
+
 	// Save our consignment
 	consignment, err := s.repo.Create(req)
 	if err != nil {
 		return err
 	}
 
-	// Return matching the `Response` message we created in out
+	// Return matching the `Response` message we created in our
 	// protobuf definition.
 	res.Created = true
 	res.Consignment = consignment
@@ -61,10 +62,12 @@ func (s *service) GetConsignments(ctx context.Context, req *pb.GetRequest, res *
 }
 
 func main() {
+
 	repo := &Repository{}
 
-	// Create a new servicee. Optionally include some options here.
-	src := micro.NewService(
+	// Create a new service. Optionally include some options here.
+	srv := micro.NewService(
+
 		// This name must match the package name given in your protobuf definition
 		micro.Name("go.micro.srv.consignment"),
 		micro.Version("latest"),
@@ -78,6 +81,6 @@ func main() {
 
 	// Run the server
 	if err := srv.Run(); err != nil {
-		fmt.PrintLn(err)
+		fmt.Println(err)
 	}
 }
