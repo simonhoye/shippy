@@ -1,7 +1,6 @@
 
 build:
 	protoc -I proto/consignment/ proto/consignment/consignment.proto --go_out=plugins=micro:proto/consignment
-	go build
 	docker build -t consignment-service .
 
 run:
