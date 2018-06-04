@@ -15,7 +15,7 @@ type Repository interface {
 	GetAll() []*pb.Consignment
 }
 
-// Repository - Dummy repository, this simulates the use of a datastore
+// ConsignmentRepository - Dummy repository, this simulates the use of a datastore
 // of some kind. We'll replace this with a real implementation later on.
 type ConsignmentRepository struct {
 	consignments []*pb.Consignment
@@ -27,7 +27,7 @@ func (repo *ConsignmentRepository) Create(consignment *pb.Consignment) (*pb.Cons
 	return consignment, nil
 }
 
-func (repo *Repository) GetAll() []*pb.Consignment {
+func (repo *ConsignmentRepository) GetAll() []*pb.Consignment {
 	return repo.consignments
 }
 
@@ -58,13 +58,7 @@ func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, re
 
 	// We set the vesselId as the vessel we got back from our
 	// vessel service
-	req.VesselId = vesselResponse.Vessel.idea
-
-	// Save our consignment
-	consignment, err := s.repo.Create(req)
-	if err != nil {
-		return err
-	}
+	req.VesselId = vesselResponse.Vessel.Id
 
 	// Save our consignment
 	consignment, err := s.repo.Create(req)

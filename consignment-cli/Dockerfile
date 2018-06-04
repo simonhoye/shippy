@@ -17,6 +17,7 @@ RUN apk --no-cache add ca-certificates
 RUN mkdir /app
 WORKDIR /app
 
+COPY consignment.json /app/consignment.json
 COPY --from=builder /go/src/github.com/simonhoye/shippy/consignment-cli/consignment-cli .
 
-CMD ["./cli"]
+CMD ["./consignment-cli"]
