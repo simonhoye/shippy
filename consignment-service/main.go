@@ -1,6 +1,8 @@
 package main
 
 import (
+
+	// Import the generated protobuf code
 	"fmt"
 	"log"
 
@@ -15,7 +17,7 @@ type Repository interface {
 	GetAll() []*pb.Consignment
 }
 
-// ConsignmentRepository - Dummy repository, this simulates the use of a datastore
+// Repository - Dummy repository, this simulates the use of a datastore
 // of some kind. We'll replace this with a real implementation later on.
 type ConsignmentRepository struct {
 	consignments []*pb.Consignment
@@ -45,7 +47,7 @@ type service struct {
 // argument, these are handled by the gRPC server.
 func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, res *pb.Response) error {
 
-	// Here we call a client instance of our vessel service with our consignmentWeight,
+	// Here we call a client instance of our vessel service with our consignment weight,
 	// and the amount of containers as the capacity value
 	vesselResponse, err := s.vesselClient.FindAvailable(context.Background(), &vesselProto.Specification{
 		MaxWeight: req.Weight,
@@ -56,7 +58,7 @@ func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, re
 		return err
 	}
 
-	// We set the vesselId as the vessel we got back from our
+	// We set the VesselId as the vessel we got back from our
 	// vessel service
 	req.VesselId = vesselResponse.Vessel.Id
 
@@ -87,7 +89,7 @@ func main() {
 	srv := micro.NewService(
 
 		// This name must match the package name given in your protobuf definition
-		micro.Name("consignment"),
+		micro.Name("go.micro.srv.consignment"),
 		micro.Version("latest"),
 	)
 
